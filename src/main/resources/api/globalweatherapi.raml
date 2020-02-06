@@ -1,0 +1,108 @@
+#%RAML 1.0
+version: 1.1
+types:
+  getWeatherDataType:
+    type: object
+securitySchemes:
+  SecurityScheme:
+    type: Basic Authentication
+title: globalWeatherapi
+description: "This is a REST api to fetch the weather information for any major cities in the world. Please pass required parameters for fetching weather information. "
+
+protocols:
+  - HTTP
+      
+/getWeather:
+  get:
+    displayName: getWeather
+    description: Use this resource  to fetch the weather information.  You will have to provide country and city name for which you want to fetch weather information.
+    queryParameters:
+      countryName:
+        description: Pass country name of the city that you want to fetch weather of.
+        example: Australia
+        type: string
+        maxLength: 60
+        required: true
+      cityName:
+        description: Pass city name to fetch weather information.
+        example: Sydney
+        type: string
+        maxLength: 90
+        required: true
+    responses:
+      "200": 
+        body:
+          application/json:
+            type: getWeatherDataType
+            example:
+              {"GetWeatherResponse": "Weather data"}
+      "400": 
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/400Example.raml
+              
+      "404":
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/404Response.raml
+              
+      401:
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/401Response.raml
+        
+      501:
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/501Response.raml
+      
+    securedBy:
+      - SecurityScheme
+/getCitiesByCountry:
+  get:
+    displayName: getCitiesByCountry
+    description: Use this resource  to fetch the cities names for any country.
+    queryParameters:
+      countryName:
+        description: Pass country name to fetch all the city names.
+        example: Australia
+        type: string
+        maxLength: 60
+        required: true
+    responses:
+      "200": 
+        body:
+          application/json:
+            type: getWeatherDataType
+            example:
+              {"GetCitiesByCountryResponse": "City Names"}
+      "400": 
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/400Example.raml
+              
+      "404":
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/404Response.raml
+              
+      401:
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/401Response.raml
+        
+      501:
+        body:
+          application/json:
+            type: !include Types/errorResponsedataType.raml
+            example: !include Examples/501Response.raml
+
+    securedBy:
+      - SecurityScheme
